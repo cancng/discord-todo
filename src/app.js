@@ -5,6 +5,7 @@ const app = express();
 const session = require('express-session');
 const MongoSessionStore = require('connect-mongo')(session);
 const passport = require('passport');
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const { db, mongooseConnection } = require('./database');
 const authRoute = require('./routes/auth');
@@ -21,6 +22,7 @@ app.use(
   }),
 );
 app.use(express.json());
+app.use(cookieParser());
 app.use(
   session({
     secret: 'e6f203cb62aaf4e02a6a17b04b5ff2f1',
