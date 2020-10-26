@@ -33,6 +33,9 @@ passport.use(
           console.log('User exists in our db.');
           await User.updateOne({
             username: `${profile.username}#${profile.discriminator}`,
+            email: profile.email,
+            verified: profile.verified,
+            avatarURL: `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.webp?size=256`,
           });
           cb(null, user);
         } else {
@@ -40,6 +43,9 @@ passport.use(
           const newUser = await User.create({
             discordId: profile.id,
             username: `${profile.username}#${profile.discriminator}`,
+            email: profile.email,
+            verified: profile.verified,
+            avatarURL: `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.webp?size=256`,
           });
           cb(null, newUser);
         }
