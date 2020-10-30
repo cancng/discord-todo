@@ -26,10 +26,20 @@ router.get(
   '/',
   isAuthorized,
   asyncHandler(async (req, res) => {
-    const todos = await Todo.find({ user: req.user._id }).sort({
-      createdAt: -1,
+    const todoPerPage = 3;
+    const page = Number(req.query.page) || 1;
+    const unlimitedTodos = await Todo.find({ user: req.user._id });
+    const todos = await Todo.find({ user: req.user._id })
+      .limit(todoPerPage)
+      .skip(todoPerPage * (page - 1))
+      .sort({
+        createdAt: -1,
+      });
+    res.json({
+      todos,
+      page,
+      pages: Math.ceil(unlimitedTodos.length / todoPerPage),
     });
-    res.json(todos);
   })
 );
 
