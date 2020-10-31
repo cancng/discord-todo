@@ -26,7 +26,7 @@ router.get(
   '/',
   isAuthorized,
   asyncHandler(async (req, res) => {
-    const todoPerPage = 3;
+    const todoPerPage = 10;
     const page = Number(req.query.page) || 1;
     const unlimitedTodos = await Todo.find({ user: req.user._id });
     const todos = await Todo.find({ user: req.user._id })

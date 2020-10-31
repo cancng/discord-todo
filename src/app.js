@@ -9,10 +9,12 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const { db, mongooseConnection } = require('./database');
-const authRoute = require('./routes/auth');
-const todoRoute = require('./routes/todo');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 const isAuthorized = require('./middleware/authMiddleware');
+
+const authRoute = require('./routes/auth');
+const todoRoute = require('./routes/todo');
+const noteRoute = require('./routes/note');
 
 const PORT = process.env.PORT || 5001;
 db();
@@ -23,7 +25,7 @@ app.use(
   cors({
     origin: process.env.FRONTEND_URL,
     credentials: true,
-  }),
+  })
 );
 app.use(express.json());
 
@@ -37,7 +39,7 @@ app.use(
     resave: false,
     name: 'discordtodoapp',
     store: new MongoSessionStore({ mongooseConnection }),
-  }),
+  })
 );
 app.use(cookieParser('e6f203cb62aaf4e02a6a17b04b5ff2f1'));
 app.use(passport.initialize());
@@ -50,8 +52,10 @@ app.get('/', isAuthorized, (req, res) => {
 
 app.use('/auth', authRoute);
 app.use('/todo', todoRoute);
+app.use('/note', noteRoute);
 app.use(notFound);
 app.use(errorHandler);
+
 app.listen(PORT, () =>
-  console.log(`Server is listening to requests on port ${PORT}`),
+  console.log(`Server is listening to requests on port ${PORT}`)
 );
